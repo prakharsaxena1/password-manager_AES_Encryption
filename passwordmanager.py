@@ -8,8 +8,10 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.fernet import Fernet
+import sys
 
-sep =':'.encode()
+
+# sep =':'.encode()
 a=list(string.punctuation)
 a.remove(':')
 charset = string.ascii_lowercase + string.ascii_uppercase + string.digits+''.join(a)
@@ -36,96 +38,73 @@ def genPassword():
         passwordStrength = passwordmeter.test(m)[0]
     return m
 
-def savePassword():
-    f=Fernet(makeKEY(returnPassword()))
+def savePassword(fernetobj):
     forsite=input('Enter site name (Like facebook.com): ').encode()
     userid = input(f'Enter {forsite.decode()} userid: ').encode()
     setPassword=genPassword()
+    data=f'{forsite}:{userid}:{setPassword}'.encode()
     if os.path.exists('userdata')==False:
         with open('userdata','wb') as ff:
-            data=forsite+ sep + userid +sep + setPassword.encode()+'\n'.encode()
-            ff.write(f.encrypt(data))
+            ff.write(fernetobj.encrypt(data)+'\n'.encode())
     else:
         with open('userdata','ab') as ff:
-            data=forsite+ sep + userid +sep + setPassword.encode()+'\n'.encode()
-            ff.write(f.encrypt(data))
+            ff.write(fernetobj.encrypt(data)+'\n'.encode())
     pyperclip.copy(setPassword)
-    print('Your password is copied to the clipboard. Please go to the site and change your current password with this one.')
+    print('Your password is copied to the clipboard. Please go to the site and change your current password with this one.\n')
 
-def viewPasswords():
-    f=Fernet(makeKEY(returnPassword()))
+def viewPasswords(fernetobj):
     if os.path.exists('userdata')==False:
         print('No passwords are created yet.')
     else:
-        with open('userdata','rb') as ff:
+        with open('userdata','r') as ff:
             for i in ff.readlines():
-                i=f.decrypt(i)
-                ii=i.decode().strip('\n').split(':')
-                print(f'Password for site {ii[0]} is {ii[2]} with userid= {ii[1]}')
+                i=fernetobj.decrypt(i.encode()) # ERROR byte and str
+                idecrypted=i.strip('\n').split(':')
+                print(f'Password for site {idecrypted[0]} is {idecrypted[2]} with userid= {idecrypted[1]}')
     
 
-def greetuser():
-    with open('userinfo','rb') as f2:
-        username = f2.read().decode().strip('\n').split(':')[1]
-        if len(username)==0:
-            raise ValueError
-        print(f'Hello, {username}')
+def check_password_and_key(givenusername,originalusername,givenpassword,originalpassword,givenkey,originalkey):
+    if givenpassword == originalpassword and givenkey == originalkey and givenusername == originalusername:
+        return True
+    return False
 
+def make_user(username,password,key,fernetobj):
+    with open('userinfo','wb') as userinfofile:
+        data=f'PasswordManagerUser:{username}:{password}'.encode()
+        userinfofile.write(fernetobj.encrypt(data))
+    with open('keyfile.key','wb') as keyfile:
+        keyfile.write(fernetobj.encrypt(key))
+    print('User and key made successfully.')
 
-def makeuser():
-    print('Create an account to use the app.')
-    username=input('Username: ').encode()
-    print('Don\'t forget this password. Without this password you will be locked out of your account.')
-    password=input('Password: ').encode()
-    with open('userinfo','wb') as f:
-        f.write('PasswordManagerUser'.encode()+sep+username+sep+password)
-    with open('keyfile.key','wb') as k:
-        k.write(makeKEY(password))
+username = input('Enter Username: ')
+password = input('Enter Password: ')
+key = makeKEY(password.encode())
+fernetobj =Fernet(key)
 
-def check(userPassword):
-    print('Checking password...')
-    userKey=makeKEY(userPassword)
-    with open('keyfile.key','rb') as k:
-        theKey=k.readline()
-    return userKey==theKey
-
-
-def authenticateuser():
-    print('Authenticating user')
-    userPassword=input('Master password : ').encode()
-    if check(userPassword) == False:
-        print('Wrong password')
-        return False
-    return True
-
-def returnPassword():
-    with open('userinfo','rb') as fdata:
-        x=fdata.readline().decode().split(':')
-        passwd=x[2].encode()
-    return passwd
-
-if os.path.exists('userinfo') == False:
-    makeuser()
-else:
-    try:
-        greetuser()
-    except Exception as e:
-        makeuser()
-
-if authenticateuser()==True:
-    print('What to do from here? \n1. Make a password\n2. View saved passwords\n3. Exit')
-    choice =' '
-    while(choice!=3):
+if os.path.exists('userinfo') == True and os.path.exists('keyfile.key') == True:
+    with open('userinfo','rb') as file:
         try:
-            choice =int(input('Enter choice: '))
-        except ValueError as e:
-            print('Wrong value')
-
-        if choice == 1:
-            savePassword()
-        elif choice == 2:
-            viewPasswords()
-        elif choice == 3:
-            print('Exiting program')
+            xx = fernetobj.decrypt(file.readline())
+        except Exception as e:
+            print('Invalid password entered. Exiting app')
+            sys.exit()
+        x=xx.decode().split(':')
+    with open('keyfile.key','rb') as file2:
+        k= file2.readline().decode().strip('\n')
+    key2=fernetobj.decrypt(k.encode())
+    if check_password_and_key(username,x[1],password,x[2],key,key2):
+        print('What to do from here? \n1. Make a password\n2. View saved passwords\n3. Exit')
+        choice =' '
+        while(choice!=3):
+            choice =int(input('Enter choice(1, 2 or 3): '))
+            if choice == 1:
+                savePassword(fernetobj)
+            elif choice == 2:
+                viewPasswords(fernetobj)
+            elif choice == 3:
+                print('Exiting program')
+    else:
+        print('Wrong credentials entered. Enter the correct one and try again')
 else:
-    print('Exiting program')
+    make_user(username,password,key,fernetobj)
+    print('Please restart the app to continue.')
