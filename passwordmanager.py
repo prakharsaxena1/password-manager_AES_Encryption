@@ -50,10 +50,8 @@ def genPassword():  # Generating a Strong password of length = 20
 
 
 def savePassword(fernetobj):
-    # Converting to bytes object
-    forsite = input('Enter site name (Like facebook.com): ').encode()
-    # Converting to bytes object
-    userid = input(f'Enter {forsite.decode()} userid: ').encode()
+    forsite = input('Enter site name (Like facebook.com): ')
+    userid = input(f'Enter {forsite} userid: ')
     setPassword = genPassword()  # Getting a random password
     data = f'{forsite}:{userid}:{setPassword}'.encode()
     if os.path.exists('userdata') == False:
@@ -79,7 +77,7 @@ def viewPasswords(fernetobj):
                 i = fernetobj.decrypt(i.encode())
                 idecrypted = i.decode().strip('\n').split(':')
                 print(
-                    f'Password for site {str(idecrypted[0])[2:-1]} is {idecrypted[2]} with userid= {str(idecrypted[1])[2:-1]}')
+                    f'Password for {idecrypted[0]} is -->   {idecrypted[2]}   <-- with userid= {idecrypted[1]}')
             else:
                 print('No passwords are created yet.')
 
