@@ -23,7 +23,7 @@ a.remove(':')
 charset = string.ascii_lowercase + \
     string.ascii_uppercase + string.digits + \
     ''.join(a)  # making characterset to choose characters from
-X = ''.join(list(set(charset)))  # jumble the words khel ra
+X = ''.join(list(set(charset)))
 
 
 def makeKEY(passgiven):  # Generating a AES Key according to the user provided password *inserts smart meme*
@@ -40,13 +40,13 @@ def makeKEY(passgiven):  # Generating a AES Key according to the user provided p
 
 
 def genPassword():  # Generating a Strong password of length = 20
-    m = ''
+    m = ''  # m is the password string
     passwordStrength = passwordmeter.test(m)[0]
     while passwordStrength < 0.9:
         for i in range(20):
             m = m+X[random.randint(0, len(X)-1)]
         passwordStrength = passwordmeter.test(m)[0]
-    return m
+    return m  # see?
 
 
 def savePassword(fernetobj):
@@ -73,11 +73,13 @@ def viewPasswords(fernetobj):
         print('No passwords are created yet.')
     else:
         with open('userdata', 'r') as ff:
-            for i in ff.readlines():
-                i = fernetobj.decrypt(i.encode())
-                idecrypted = i.decode().strip('\n').split(':')
-                print(
-                    f'Password for {idecrypted[0]} is -->   {idecrypted[2]}   <-- with userid= {idecrypted[1]}')
+            listPass = ff.readlines()
+            if len(listPass) != 0:
+                for i in listPass:
+                    i = fernetobj.decrypt(i.encode())
+                    idecrypted = i.decode().strip('\n').split(':')
+                    print(
+                        f'Password for {idecrypted[0]} is -->   {idecrypted[2]}   <-- with userid= {idecrypted[1]}')
             else:
                 print('No passwords are created yet.')
 
