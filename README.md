@@ -55,4 +55,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * https://www.youtube.com/watch?v=H8t4DJ3Tdrg
 * https://cryptography.io/en/latest/
 * https://nitratine.net/blog/post/encryption-and-decryption-in-python/
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Billie Thompson** - *readme.md layout* - [PurpleBooth](https://github.com/PurpleBooth)
