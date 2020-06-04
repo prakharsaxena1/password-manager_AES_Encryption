@@ -1,8 +1,8 @@
 # Password Manager (AES-Encryption)
 
-This app is a __single-user password manager__ i.e. it is focused on *one-use-multiple-passwords* approach. The user first have to create an account in this app by filling in *username* and *password*. The password is used to encrypt the data to if the user forgets the password or any of the file is deleted then the passwords can never be decrypted.
+This app is a __single-user password manager__ i.e. it is focused on *one-user-multiple-passwords* approach. The user first have to create an account in this app by filling in *username* and *password*. The password is used to encrypt the data to if the user forgets the password or any of the file is deleted then the passwords can never be decrypted.
 
-Example password:  "c\\>ix/fr?8I!C1@'E_oF"
+Example password:  "c\\>ix/fr?8I!C1@'E_oF" (without "")
 
 - Check the password strength -
 
