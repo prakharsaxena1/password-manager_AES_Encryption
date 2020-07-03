@@ -1,6 +1,7 @@
 # Password Manager (AES-Encryption)
 
 This app is a __single-user password manager__ i.e. it is focused on *one-user-multiple-passwords* approach. The user first have to create an account in this app by filling in *username* and *password*. The password is used to encrypt the data to if the user forgets the password or any of the file is deleted then the passwords can never be decrypted.
+This password manager user the Advanced Encryption Standard (AES) to encrypt and secrypt passwords.
 
 Example password:  "c\\>ix/fr?8I!C1@'E_oF" (without "")
 
@@ -9,6 +10,7 @@ Example password:  "c\\>ix/fr?8I!C1@'E_oF" (without "")
   > [passwordmeter.com](http://www.passwordmeter.com/)
 
   > [thycotic.com](https://thycotic.com/resources/password-strength-checker/)
+
 
 
 ## Getting Started
@@ -21,10 +23,12 @@ These instructions will get you a copy of the project up and running on your loc
 - __View all saved password__
 - __Exit the app__
 
+Remember if you forget you master password and username then these saved passwords cannot be recovered.
+
 ### Prerequisites
 
 Few modules are needed to be installed to use this app. They are :
-- cryptograohy
+- cryptography
 - pyperclip
 - passwordmeter
 
