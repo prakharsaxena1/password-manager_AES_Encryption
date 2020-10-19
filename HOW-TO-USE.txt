@@ -1,0 +1,44 @@
+███╗   ███╗ █████╗ ██████╗ ███████╗    ██████╗ ██╗   ██╗    ██████╗ ██████╗  █████╗ ██╗  ██╗██╗  ██╗ █████╗ ██████╗     ███████╗ █████╗ ██╗  ██╗███████╗███╗   ██╗ █████╗ 
+████╗ ████║██╔══██╗██╔══██╗██╔════╝    ██╔══██╗╚██╗ ██╔╝    ██╔══██╗██╔══██╗██╔══██╗██║ ██╔╝██║  ██║██╔══██╗██╔══██╗    ██╔════╝██╔══██╗╚██╗██╔╝██╔════╝████╗  ██║██╔══██╗
+██╔████╔██║███████║██║  ██║█████╗      ██████╔╝ ╚████╔╝     ██████╔╝██████╔╝███████║█████╔╝ ███████║███████║██████╔╝    ███████╗███████║ ╚███╔╝ █████╗  ██╔██╗ ██║███████║
+██║╚██╔╝██║██╔══██║██║  ██║██╔══╝      ██╔══██╗  ╚██╔╝      ██╔═══╝ ██╔══██╗██╔══██║██╔═██╗ ██╔══██║██╔══██║██╔══██╗    ╚════██║██╔══██║ ██╔██╗ ██╔══╝  ██║╚██╗██║██╔══██║
+██║ ╚═╝ ██║██║  ██║██████╔╝███████╗    ██████╔╝   ██║       ██║     ██║  ██║██║  ██║██║  ██╗██║  ██║██║  ██║██║  ██║    ███████║██║  ██║██╔╝ ██╗███████╗██║ ╚████║██║  ██║
+╚═╝     ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝    ╚═════╝    ╚═╝       ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚═╝  ╚═╝
+                                                                                                                                                                          
+https://github.com/prakharsaxena1
+
+ ______                                  _           _    _                   
+|_   _ `.                               (_)         / |_ (_)                  
+  | | `. \ .---.  .--.   .---.  _ .--.  __  _ .--. `| |-'__   .--.   _ .--.   
+  | |  | |/ /__\\( (`\] / /'`\][ `/'`\][  |[ '/'`\ \| | [  |/ .'`\ \[ `.-. |  
+ _| |_.' /| \__., `'.'. | \__.  | |     | | | \__/ || |, | || \__. | | | | |  
+|______.'  '.__.'[\__) )'.___.'[___]   [___]| ;.__/ \__/[___]'.__.' [___||__] 
+                                           [__|                               
+
+This is a simple password manager which uses double AES for encrypting and decrypting passwords.
+This app is intended for use by 1 user only to store as many password as their heart desires.
+
+This password manager generates 3 files:
+1. userinfo
+2. userdata
+3. keydata.key
+
+The passwords are stored in a file named "userdata", user information is stored in the file named "userinfo" (Quite obvious if you ask me)
+and the key is stored in keydata.key (don't try, it's encrypted ROFL)
+If any of the 3 files are deleted or are changed the app won't work, so always keep a backup in a protected place like Google drive or a pendrive, etc.
+Also if you forgot your username or password to the app then these passwords can NEVER be DECRYPTED (SOL: DON'T FORGET YOUR USERNAME AND PASSWORD FOR THE APP)
+
+
+88  88  dP"Yb  Yb        dP     888888  dP"Yb      88   88 .dP"Y8 888888     88 888888     oP"Yb. 
+88  88 dP   Yb  Yb  db  dP        88   dP   Yb     88   88 `Ybo.  88__       88   88      "" .dP' 
+888888 Yb   dP   YbdPYbdP         88   Yb   dP     Y8   8P   `Y8b 88""       88   88         8P   
+88  88  YbodP     YP  YP          88    YbodP      `YbodP' 8bodP' 888888     88   88        (8)   
+
+STEP 1: OPEN THE APP AND MAKE AN ACCOUNT (USERNAME AND PASSWORD)
+STEP 2: CHOOSE YOUR OPTIONS(1- MAKE A PASSWORD ,2- VIEW SAVED PASSWORDS ,3- EXIT)
+STEP 3: IF YOU CHOOSE TO MAKE A PASSWORD THEN PRESS 1 AND THEN ENTER
+STEP 3.a: ENTER SITE NAME FOR WHICH YOU WANT TO MAKE THE PASSWORD (LIKE: facebook.com)
+STEP 3.b: ENTER USERNAME FOR THAT SITE. (LIKE: john.doe@gmail.com)
+STEP 3.c: NOW YOU GET THE PASSWORD COPIED TO THE CLIPBOARD WHICH IS ALSO SAVED IN THE "userdata" FILE
+STEP 4: IF YOU CHOOSE TO VIEW PASSWORDS THEN ALL THE SAVED PASSWORDS WILL BE PRINTED ON THE SCREEN FOR YOU TO COPY
+STEP 5: IF YOU CHOOSE TO EXIT THE APP, THEN A MAGICAL THING WILL HAPPEN WHICH YOU CAN'T IMAGINE, IT WILL ACTUALLY EXIT THE APP.(OMG!!)
