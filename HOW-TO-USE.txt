@@ -34,6 +34,10 @@ Also if you forgot your username or password to the app then these passwords can
 888888 Yb   dP   YbdPYbdP         88   Yb   dP     Y8   8P   `Y8b 88""       88   88         8P   
 88  88  YbodP     YP  YP          88    YbodP      `YbodP' 8bodP' 888888     88   88        (8)   
 
+WARNING!!!
+BEFORE STARTING THE APP INSTALL THE MODULES THAT ARE MENTIONED IN THE "requirements.txt" FILE.
+COMMAND: pip install -r requirements.txt
+
 STEP 1: OPEN THE APP AND MAKE AN ACCOUNT (USERNAME AND PASSWORD)
 STEP 2: CHOOSE YOUR OPTIONS(1- MAKE A PASSWORD ,2- VIEW SAVED PASSWORDS ,3- EXIT)
 STEP 3: IF YOU CHOOSE TO MAKE A PASSWORD THEN PRESS 1 AND THEN ENTER
