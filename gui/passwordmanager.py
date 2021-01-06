@@ -32,6 +32,7 @@ class PasswordManager():
         forsite = input('Enter site name (Like facebook.com): ')
         userid = input(f'Enter {forsite} userid: ')
         setPassword = self.genPassword()
+        
         data = f'{forsite}:{userid}:{setPassword}'.encode()
         with open(self.userdataPATH, 'ab') as ff:
             ff.write(fernetobj.encrypt(data)+'\n'.encode())
@@ -75,8 +76,7 @@ class PasswordManager():
         self.X = ''.join(set(list(charset)))
         # Making KEY
         self.salt = b''
-        self.kdf = PBKDF2HMAC(algorithm=hashes.SHA256(
-        ), length=32, salt=self.salt, iterations=100000, backend=default_backend())
+        self.kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=self.salt, iterations=100000, backend=default_backend())
         self.key = base64.urlsafe_b64encode(
             self.kdf.derive(self.password.encode()))
         self.fernetobj = Fernet(self.key)

@@ -27,8 +27,7 @@ except ModuleNotFoundError as e:
 
 def makeKEY(passgiven):  # Generating a AES Key according to the user provided password *inserts smart meme*
     salt = b''
-    kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32,
-                    salt=salt, iterations=100000, backend=default_backend())
+    kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=100000, backend=default_backend())
     key = base64.urlsafe_b64encode(kdf.derive(passgiven))
     return key
 
@@ -72,7 +71,6 @@ def viewPasswords(fernetobj):
 
 # Making user for the first time. This will only execute once for creating the user.
 
-
 def make_user(username, password, key, fernetobj):
     with open('userinfo', 'wb') as userinfofile:
         # Using encode() as we are working with bytes
@@ -110,6 +108,7 @@ if os.path.exists('userinfo') == True and os.path.exists('keyfile.key') == True:
             print('Invalid password entered. Exiting app')
             sys.exit()
         x = xx.decode().split(':')
+        print(x)
     if username == x[1]:
         print('What to do? \n1. Make a password\n2. View saved passwords\n3. Exit')
         choice = ''
