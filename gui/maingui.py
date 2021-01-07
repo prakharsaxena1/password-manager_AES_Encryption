@@ -8,8 +8,6 @@ from tkinter import messagebox
 # Other Standard library imports:
 import os
 import datetime
-from tkinter import font
-from PIL import ImageTk, Image
 import random
 import base64
 import hashlib
@@ -17,6 +15,7 @@ import shutil
 
 # REQUIRED MODULES
 try:
+    from PIL import ImageTk, Image
     from cryptography.hazmat.primitives import hashes
     from cryptography.hazmat.backends import default_backend
     from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -26,6 +25,7 @@ try:
     import webbrowser
 except ModuleNotFoundError as e:
     print("Modules required to run the application are not found.")
+    print("pip install pillow")
     print("pip install cryptography")
     print("pip install passwordmeter")
     print("pip install pyperclip")
@@ -180,34 +180,23 @@ class LRWindow(tk.Frame):
         if len(password) <= 4:
             messagebox.showerror("Password Error", "Password used is too small")
             return 0
-
         usernameHash = hashlib.md5(username.encode()).hexdigest()
         userHOME = "Users/UsersInfo/"+str(usernameHash)
         key = makeKEY(password.encode())
         fernetobj = Fernet(key)
-
         userFound = False
-        passMatch = False
-
+        passMatch = True
         with open("Users/users.file","r") as f:
             for i in f.readlines():
                 if i.strip("\n") == usernameHash:
                     userFound = True
                     break
-        data = " : : "
-        # print(userFound)
-        try:
-            with open(userHOME + "/userinfo","r") as f:
-                try:
-                    fernetobj.decrypt(f.readline())
-                except Exception as e:
-                    passMatch = False
-                passMatch = True
-        except Exception as e:
-            self.statusLabel["text"] = "~- log-in FAILED -~"
-            messagebox.showerror("User Error", "Username invalid")
-            
-        print(passMatch)
+        with open(userHOME + "/userinfo","rb") as f:
+            try:
+                fernetobj.decrypt(f.readline())
+            except Exception as e:
+                passMatch = False
+                messagebox.showerror("Password Error", "Password invalid")
         if userFound == False or passMatch == False:
             self.statusLabel["text"] = "~- log-in FAILED -~"
         elif userFound == True and passMatch == True:
@@ -216,7 +205,6 @@ class LRWindow(tk.Frame):
             self.mainAppFrame.grid(row=0, column=0, sticky="NESW")
             with open("Users/logs.log", "w") as f:
                 f.write(f"{datetime.datetime.now()} Last logged in by: {usernameHash}")
-
 
     def useFunction(self):
         username = self.usernameVariable.get()
@@ -236,7 +224,6 @@ class LRWindow(tk.Frame):
             self.passwordEntry['show'] = ""
         else:
             self.passwordEntry['show'] = "*"
-
 
 # Main Application Window class
 
