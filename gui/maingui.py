@@ -186,20 +186,27 @@ class LRWindow(tk.Frame):
         fernetobj = Fernet(key)
         userFound = False
         passMatch = True
+
         with open("Users/users.file","r") as f:
             for i in f.readlines():
                 if i.strip("\n") == usernameHash:
                     userFound = True
                     break
+        if userFound == False:
+            self.statusLabel["text"] = "~- log-in FAILED -~"
+            return 0
+
         with open(userHOME + "/userinfo","rb") as f:
             try:
                 fernetobj.decrypt(f.readline())
             except Exception as e:
                 passMatch = False
                 messagebox.showerror("Password Error", "Password invalid")
-        if userFound == False or passMatch == False:
+        if passMatch == False:
             self.statusLabel["text"] = "~- log-in FAILED -~"
-        elif userFound == True and passMatch == True:
+            return 0
+
+        if userFound == True and passMatch == True:
             self.statusLabel["text"] = "~- Successfully logged-in -~"
             self.mainAppFrame = mainAppWindow(self.controller,username,password)
             self.mainAppFrame.grid(row=0, column=0, sticky="NESW")
@@ -375,11 +382,9 @@ class SaveFieldWindow(ttk.Frame):
 
     def saveField(self,userHOME,fernetobj):
         data = f"{self.websiteVariable.get()}:{self.userIDVariable.get()}:{self.sitePasswordVariable.get()}".encode()
-        with open(userHOME+"/userdata","a") as f:
+        with open(userHOME+"/userdata","ab") as f:
             f.write(fernetobj.encrypt(data))
-            f.write("\n")
-        
-
+            f.write("\n".encode())
         self.goBack()
 
 
@@ -403,7 +408,9 @@ class ViewPasswordsWindow(ttk.Frame):
         with open(userHOME+"/userdata","rb") as f:
             x = f.readlines()
             for i in x:
-                print(fernetobj.decrypt(i))
+                idecrypted = fernetobj.decrypt(i.replace(b"\n", b""))
+                idecrypted = idecrypted.decode().split(":")
+                print(f'Password for {idecrypted[0]} is -->   {idecrypted[2]}   <-- with userid= {idecrypted[1]}')
 
 
         self.backButton = ttk.Button(self, text="Go back", command=self.goBack)
