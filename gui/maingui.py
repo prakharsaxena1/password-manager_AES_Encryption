@@ -40,7 +40,6 @@ ALL_TEXT_FONT_Password = ("Calibri", 25, "bold")
 ALL_MENU_FONT = ("Helvetica", 10)
 
 # =================== OTHER
-# AutoLogin = True  # REMOVE AFTER DEVELOPMENT
 APP_KEYWORD_CONST = "prakhar"  # Don't change it
 charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&()*+,-./<=>?@[]^_{|}~"
 X = ''.join(set(list(charset)))
@@ -138,6 +137,7 @@ class LRWindow(tk.Frame):
         self.statusLabel = ttk.Label(self, text=" ", font=ALL_TEXT_FONT)
         self.statusLabel.grid(row=6, column=0, columnspan=2, padx=(5), pady=(5), ipadx=(5))
 
+# ================================================= FUNCTIONS FOR LRWindow Class
     def registerFunction(self, username, password):
         # Checking username and password entered by the user
         if len(username) <= 4:
@@ -232,18 +232,20 @@ class LRWindow(tk.Frame):
         else:
             self.passwordEntry['show'] = "*"
 
+
 # Main Application Window class
 
 class mainAppWindow(tk.Frame):
     def __init__(self, parent,username,password):
         # mainApp window (side stuff)
         super().__init__(parent)
+
+        # ========================================================== VARIABLES and Setting up frame
         self.controller = parent
         self.columnconfigure(index=(0, 1, 2), weight=1)
         self.controller.geometry("500x300")
         self.controller.resizable(1, 1)
-
-        # ========================================================== VARIABLES
+        
         self.who = tk.StringVar(value=" ")
         self.who.set(value=username)
 
@@ -299,6 +301,7 @@ class mainAppWindow(tk.Frame):
         self.viewButton = ttk.Button(self, text="View passwords", command=self.viewPasswords)
         self.viewButton.grid(row=1, column=2, padx=(10), pady=(5), ipadx=(10), ipady=(5))
 
+# ================================================= FUNCTIONS FOR MainWindow Class
     def savePasswordEntryWindow(self):
         self.saveButton.grid_forget()
         self.genPassButton.grid_forget()
@@ -317,11 +320,13 @@ class mainAppWindow(tk.Frame):
         # copy button
         self.copyButton = ttk.Button(self, text="Copy", command=lambda: pyperclip.copy(self.showLabel["text"]))
         self.copyButton.grid(row=3, column=0, columnspan=3, padx=(10), pady=(5), ipadx=(10), ipady=(5))
-
+        
+        # Making password and showing it in the showLabel
         passwd = genPassword()
         self.showLabel["text"] = passwd
 
     def backupForPort(self):
+        # For backing up users: NEEDS MORE FUNCTIONS
         shutil.make_archive("BKP_PORT_Users", 'zip', "Users")
 
     def devinfo(self):
@@ -332,11 +337,12 @@ class mainAppWindow(tk.Frame):
 class SaveFieldWindow(ttk.Frame):
     def __init__(self, parent,username,password):
         super().__init__(parent)
+        
+        # ========================================================== VARIABLES and Setting up frame
         self.controller = parent
         self.columnconfigure(index=(0, 1), weight=1)
         self.rowconfigure(index=(0, 1, 2), weight=1)
 
-        # ========================================================== VARIABLES
         self.websiteVariable = tk.StringVar()
         self.userIDVariable = tk.StringVar()
         self.sitePasswordVariable = tk.StringVar()
@@ -350,30 +356,37 @@ class SaveFieldWindow(ttk.Frame):
         fernetobj = Fernet(key)
 
         # ========================================================== LAYOUT
+        # Title of the frame
         self.titleLabel = ttk.Label(self, text="~ ADD FIELD ~", font=ALL_TEXT_FONT)
         self.titleLabel.grid(row=0, column=0, columnspan=2, sticky="EW", padx=(25), pady=(10))
 
+        # Website
         self.websiteLabel = ttk.Label(self, text="Website: ", font=ALL_TEXT_FONT)
         self.websiteEntry = ttk.Entry(self, textvariable=self.websiteVariable, width="25")
         self.websiteLabel.grid(row=1, column=0, sticky="W", padx=(10, 5), pady=(5))
         self.websiteEntry.grid(row=1, column=1, sticky="E", padx=(5, 10), pady=(5))
 
+        # Login ID for that website
         self.userIDLabel = ttk.Label(self, text="Login ID: ", font=ALL_TEXT_FONT)
         self.userIDEntry = ttk.Entry(self, textvariable=self.userIDVariable, width="25")
         self.userIDLabel.grid(row=2, column=0, sticky="W", padx=(10, 5), pady=(5))
         self.userIDEntry.grid(row=2, column=1, sticky="E", padx=(5, 10), pady=(5))
 
+        # Password for that website LoginID
         self.passwordLabel = ttk.Label(self, text="Password: ", font=ALL_TEXT_FONT)
         self.passwordEntry = ttk.Entry(self, textvariable=self.sitePasswordVariable, width="25")
         self.passwordLabel.grid(row=3, column=0, sticky="W", padx=(10, 5), pady=(5))
         self.passwordEntry.grid(row=3, column=1, sticky="E", padx=(5, 10), pady=(5))
 
+        # Back to previous frame
         self.backButton = ttk.Button(self, text="Go back", command=self.goBack)
         self.backButton.grid(row=4, column=0, padx=(5, 10), pady=(5))
 
+        # Save all the entry
         self.saveInfoButton = ttk.Button(self, text="Save", command=lambda: self.saveField(userHOME,fernetobj))
         self.saveInfoButton.grid(row=4, column=1, padx=(5, 10), pady=(5))
 
+# ================================================= FUNCTIONS FOR SaveField Class
     def goBack(self):
         self.controller.saveButton.grid(row=1, column=1, padx=(10), pady=(5), ipadx=(10), ipady=(5))
         self.controller.genPassButton.grid(row=1, column=0, padx=(10), pady=(5), ipadx=(10), ipady=(5))
@@ -404,23 +417,56 @@ class ViewPasswordsWindow(ttk.Frame):
         userHOME = "Users/UsersInfo/"+str(usernameHash)
         key = makeKEY(password.encode())
         fernetobj = Fernet(key)
-
+        count = 0
         with open(userHOME+"/userdata","rb") as f:
             x = f.readlines()
             for i in x:
+                count += 1
                 idecrypted = fernetobj.decrypt(i.replace(b"\n", b""))
                 idecrypted = idecrypted.decode().split(":")
-                print(f'Password for {idecrypted[0]} is -->   {idecrypted[2]}   <-- with userid= {idecrypted[1]}')
+                self.xFrame = ViewPassLine(self,idecrypted)
+                self.xFrame.grid(row=count,column=0)
+                # print(f'Password for {idecrypted[0]} is -->   {idecrypted[2]}   <-- with userid= {idecrypted[1]}')
 
 
         self.backButton = ttk.Button(self, text="Go back", command=self.goBack)
         self.backButton.grid(row=4, column=0, padx=(5, 10), pady=(5))
 
+# ================================================= FUNCTIONS FOR ViewPasswordsWindow Class
     def goBack(self):
         self.controller.saveButton.grid(row=1, column=1, padx=(10), pady=(5), ipadx=(10), ipady=(5))
         self.controller.genPassButton.grid(row=1, column=0, padx=(10), pady=(5), ipadx=(10), ipady=(5))
         self.controller.viewButton.grid(row=1, column=2, padx=(10), pady=(5), ipadx=(10), ipady=(5))
         self.destroy()
+
+class ViewPassLine(ttk.Frame):
+    def __init__(self, parent,data):
+        super().__init__(parent, borderwidth=1)
+        
+        self.columnconfigure(index=(0,1,2), weight=1)
+        self.controller = parent
+        self.data = data
+
+        self.frame1 = ttk.Frame(self)
+        self.siteLabel = ttk.Label(self.frame1, text=str(data[0]), font=ALL_TEXT_FONT)
+        self.siteLabel.grid(row=0,column=0,padx=(5),pady=(5))
+        self.frame1.grid(row=0,column=0)
+
+        self.frame2 = ttk.Frame(self)
+        self.loginLabel = ttk.Label(self.frame2, text=str(data[1]), font=ALL_TEXT_FONT)
+        self.loginLabel.grid(row=0,column=0,padx=(5),pady=(5))
+        self.frame2.grid(row=0,column=1)
+        # copy button
+        self.copyButton1 = ttk.Button(self.frame2, text=" Copy ", command=lambda: pyperclip.copy(self.loginLabel["text"]))
+        self.copyButton1.grid(row=0, column=1, padx=(10), pady=(5), ipadx=(10), ipady=(5))
+
+        self.frame3 = ttk.Frame(self)
+        self.passLabel = ttk.Label(self.frame3, text=str(data[2]), font=ALL_TEXT_FONT)
+        self.passLabel.grid(row=0,column=0,padx=(5),pady=(5))
+        # copy button
+        self.copyButton2 = ttk.Button(self.frame3, text=" Copy ", command=lambda: pyperclip.copy(self.passLabel["text"]))
+        self.copyButton2.grid(row=0, column=1, padx=(10), pady=(5), ipadx=(10), ipady=(5))
+        self.frame3.grid(row=0,column=2)
 
 
 # Check if folders exists or not
